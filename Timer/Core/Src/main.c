@@ -361,7 +361,7 @@ void HAL_TIM_PeriodElapsedCallback ( TIM_HandleTypeDef * htim ) {
 		switch (led_status) {
 			case 1:
 				HAL_GPIO_TogglePin(LED_RED_GPIO_Port, LED_RED_Pin);
-				HAL_GPIO_TogglePin(DOT_GPIO_Port, DOT_Pin);
+				//HAL_GPIO_TogglePin(DOT_GPIO_Port, DOT_Pin);
 				HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, GPIO_PIN_SET);
 				HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin, GPIO_PIN_SET);
 				HAL_GPIO_WritePin(EN3_GPIO_Port, EN3_Pin, GPIO_PIN_SET);
@@ -370,7 +370,7 @@ void HAL_TIM_PeriodElapsedCallback ( TIM_HandleTypeDef * htim ) {
 				break;
 
 			case 2:
-				HAL_GPIO_TogglePin(DOT_GPIO_Port, DOT_Pin);
+				//HAL_GPIO_TogglePin(DOT_GPIO_Port, DOT_Pin);
 				HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, GPIO_PIN_SET);
 				HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin, GPIO_PIN_SET);
 				HAL_GPIO_WritePin(EN3_GPIO_Port, EN3_Pin, GPIO_PIN_SET);
