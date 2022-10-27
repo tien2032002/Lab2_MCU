@@ -46,6 +46,8 @@ const int MAX_LED=4;
 static int index_led=0;
 static int led_buffer[4]={7,5,1,2};
 static int hour=15, minutes=8, second=50;
+
+
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
@@ -57,6 +59,7 @@ static void MX_TIM2_Init(void);
 void display7SEG(int num);
 void update7SEG(int index);
 void updateClockBuffer();
+void update_led_matrix_buffer();
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -224,7 +227,10 @@ int timer0_counter=0;
 int timer0_flag=0;
 int timer1_counter=0;
 int timer1_flag=0;
+int timer2_counter=0;
+int timer2_flag=0;
 int TIMER_CYCLE=10;
+
 void setTimer0(int duration) {
 	timer0_counter=duration/TIMER_CYCLE;
 	timer0_flag=0;
@@ -238,6 +244,10 @@ void timer_run() {
 			timer1_counter--;
 			if (timer1_counter==0) timer1_flag=1;
 	}
+	if (timer2_counter>0) {
+			timer2_counter--;
+			if (timer2_counter==0) timer2_flag=1;
+	}
 }
 
 void setTimer1(int duration) {
@@ -245,9 +255,63 @@ void setTimer1(int duration) {
 	timer1_flag=0;
 }
 
+void setTimer2(int duration) {
+	timer2_counter=duration/TIMER_CYCLE;
+	timer2_flag=0;
+}
+
 const int MAX_LED_MATRIX=8;
 int index_led_matrix=0;
-uint8_t matrix_buffer[8]={0x18, 0x3c, 0x66, 0x66, 0x7e, 0x7e, 0x66, 0x66};
+
+static uint8_t led_animation_buffer[3][8]={{0x18, 0x3c, 0x66, 0x66, 0x7e, 0x7e, 0x66, 0x66},
+										   {0x3e, 0x46, 0x46, 0x46, 0x3e, 0x46, 0x46, 0x3e},
+										   {0x7e, 0x7e, 0x6, 0x6, 0x6, 0x6, 0x7e, 0x7e}};
+
+uint8_t matrix_buffer[8];
+
+int led_matrix_buffer_status=0;
+
+void update_led_matrix_buffer(){
+	switch (led_matrix_buffer_status) {
+	case 0:
+		for (int i=0;i<8;i++) {
+			matrix_buffer[i]=led_animation_buffer[0][i];
+		}
+		led_matrix_buffer_status=1;
+		setTimer2(1000);
+		break;
+	case 1:
+		for (int i=0;i<8;i++) {
+			matrix_buffer[i]=led_animation_buffer[0][i];
+		}
+		if (timer2_flag==1) {
+			led_matrix_buffer_status=2;
+			setTimer2(1000);
+		}
+		break;
+	case 2:
+		for (int i=0;i<8;i++) {
+			matrix_buffer[i]=led_animation_buffer[1][i];
+		}
+		if (timer2_flag==1) {
+			led_matrix_buffer_status=3;
+			setTimer2(1000);
+		}
+		break;
+	case 3:
+		for (int i=0;i<8;i++) {
+			matrix_buffer[i]=led_animation_buffer[2][i];
+		}
+		if (timer2_flag==1) {
+			led_matrix_buffer_status=1;
+			setTimer2(1000);
+		}
+		break;
+	default:
+		break;
+	}
+}
+
 void updateLEDMatrix(int index) {
 	switch (index) {
 	case 0:
@@ -341,9 +405,10 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   setTimer0(803);
-  setTimer1(1000);
+  setTimer1(805);
   while (1)
   {
+	  update_led_matrix_buffer();
 	  if (timer0_flag==1) {
 		second++;
 		if (second>=60) {
@@ -372,8 +437,9 @@ int main(void)
 			  index_led_matrix=7;
 		  }
 		  updateLEDMatrix(index_led_matrix);
-		  setTimer1(250);
+		  setTimer1(25);
 	  }
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
