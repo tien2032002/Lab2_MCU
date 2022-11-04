@@ -913,11 +913,11 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  setTimer0(803);
- 800072e:	f240 3023 	movw	r0, #803	; 0x323
+  setTimer0(910);
+ 800072e:	f240 308e 	movw	r0, #910	; 0x38e
  8000732:	f7ff ff8d 	bl	8000650 <setTimer0>
-  setTimer1(1000);
- 8000736:	f44f 707a 	mov.w	r0, #1000	; 0x3e8
+  setTimer1(970);
+ 8000736:	f240 30ca 	movw	r0, #970	; 0x3ca
  800073a:	f7ff ffd1 	bl	80006e0 <setTimer1>
   while (1)
   {
