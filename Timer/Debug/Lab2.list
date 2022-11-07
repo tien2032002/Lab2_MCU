@@ -1541,8 +1541,8 @@ int main(void)
  8000ba6:	681b      	ldr	r3, [r3, #0]
  8000ba8:	4618      	mov	r0, r3
  8000baa:	f7ff fe7f 	bl	80008ac <updateLEDMatrix>
-		  setTimer1(25);
- 8000bae:	2019      	movs	r0, #25
+		  setTimer1(10);
+ 8000bae:	200a      	movs	r0, #10
  8000bb0:	f7ff fdaa 	bl	8000708 <setTimer1>
 	  update_led_matrix_buffer();
  8000bb4:	e79d      	b.n	8000af2 <main+0x2a>
